@@ -13,31 +13,32 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const fs = require('fs')
 
-const basePath = path.join(__dirname, '../', '/src/pages')
+const basePath = path.join(__dirname, '..', '/src/pages')
 let nowPath = basePath, prePath = basePath
 const routes = []
 const getRouter = (pagePath) => {
-  fs.readdirSync(pagePath).forEach(filename => {
+  const filenames = fs.readdirSync(pagePath)
+  if (!filenames) return
+  filenames.forEach(filename => {
     if (filename === 'index') return  // foreach中return代替continue
-    const fileType = fs.statSync(pagePath + '/' + filename)
+    const fileType = fs.statSync(pagePath + path.sep + filename)
     if (fileType.isFile()) {
-      const preRouter = nowPath.replace(basePath, '')
+      const prefixRouter = nowPath.replace(basePath, '').replace(path.sep, '/')
       const name = filename.split('.')[0]
       if (name === 'index') {
-        routes.push(preRouter + '/')
+        prefixRouter ? routes.push(prefixRouter) : routes.push('/')
       } else {
-        routes.push(preRouter + '/' + name)
+        routes.push(prefixRouter + '/' + name)
       }
     }
     if (fileType.isDirectory()) {
-      nowPath = nowPath + '/' + filename
-      prePath = nowPath.replace('/' + filename, '')
+      nowPath = nowPath + path.sep + filename
+      prePath = nowPath.replace(path.sep + filename, '')
       getRouter(nowPath)
     }
   })
-  prePath = nowPath.split('/')
-  prePath.length = prePath.length - 1
-  nowPath = prePath.join('/')
+  prePath !== basePath && (prePath = path.join(prePath, '..'))
+  nowPath = prePath
 }
 
 getRouter(nowPath)
