@@ -24,11 +24,13 @@ const getRouter = (pagePath) => {
     const fileType = fs.statSync(pagePath + path.sep + filename)
     if (fileType.isFile()) {
       const prefixRouter = nowPath.replace(basePath, '').replace(path.sep, '/')
-      const name = filename.split('.')[0]
-      if (name === 'index') {
-        prefixRouter ? routes.push(prefixRouter) : routes.push('/')
-      } else {
-        routes.push(prefixRouter + '/' + name)
+      if (filename.endsWith('vue')) {
+        const name = filename.split('.')[0]
+        if (name === 'index') {
+          prefixRouter ? routes.push(prefixRouter) : routes.push('/')
+        } else {
+          routes.push(prefixRouter + '/' + name)
+        }
       }
     }
     if (fileType.isDirectory()) {
