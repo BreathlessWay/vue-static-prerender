@@ -5,7 +5,7 @@ import Index from '@/pages/index'
 import Join from '@/pages/join'
 import About from '@/pages/about'
 import Intro from '@/pages/intro'
-import Guess from '@/pages/intro/guess'
+import IntroIndex from '@/pages/intro/index/index'
 import Today from '@/pages/intro/today'
 
 Vue.use(Router)
@@ -36,7 +36,7 @@ export default new Router({
         {
           path: '',
           name: 'guess',
-          component: Guess
+          component: IntroIndex
         },
         {
           path: 'today',

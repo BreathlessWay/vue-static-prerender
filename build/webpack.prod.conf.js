@@ -18,11 +18,10 @@ let nowPath = basePath, prePath = basePath
 const routes = []
 const getRouter = (pagePath) => {
   fs.readdirSync(pagePath).forEach(filename => {
+    if (filename === 'index') return  // foreach中return代替continue
     const fileType = fs.statSync(pagePath + '/' + filename)
-    console.log('filename:', filename)
     if (fileType.isFile()) {
       const preRouter = nowPath.replace(basePath, '')
-      console.log('preRouter:', preRouter)
       const name = filename.split('.')[0]
       if (name === 'index') {
         routes.push(preRouter + '/')
@@ -33,7 +32,6 @@ const getRouter = (pagePath) => {
     if (fileType.isDirectory()) {
       nowPath = nowPath + '/' + filename
       prePath = nowPath.replace('/' + filename, '')
-      console.log('prePath', nowPath)
       getRouter(nowPath)
     }
   })
@@ -43,13 +41,11 @@ const getRouter = (pagePath) => {
 }
 
 getRouter(nowPath)
-console.log(routes)
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
       extract: true,
       usePostCSS: true
     })
