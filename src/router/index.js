@@ -4,6 +4,9 @@ import Meta from 'vue-meta'
 import Index from '@/pages/index'
 import Join from '@/pages/join'
 import About from '@/pages/about'
+import Intro from '@/pages/intro'
+import Guess from '@/pages/intro/guess'
+import Today from '@/pages/intro/today'
 
 Vue.use(Router)
 Vue.use(Meta)
@@ -25,6 +28,22 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About
+    },
+    {
+      path: '/intro',
+      component: Intro,
+      children: [
+        {
+          path: '',
+          name: 'guess',
+          component: Guess
+        },
+        {
+          path: 'today',
+          name: 'today',
+          component: Today
+        }
+      ]
     }
   ]
 })

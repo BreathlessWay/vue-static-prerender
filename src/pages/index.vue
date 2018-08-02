@@ -2,6 +2,7 @@
   <div>
     <router-link to="/about">about</router-link>
     <router-link to="/join">join</router-link>
+    <router-link to="/intro">intro</router-link>
     <div class="one">
       <div class="two">1</div>
       <div class="three">2</div>
